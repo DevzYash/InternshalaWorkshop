@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/dashboard">
+
+    <fragment
+        android:id="@+id/register"
+        android:name="com.internshalaworkshop.Register"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" >
+        <action
+            android:id="@+id/action_register_to_dashboard"
+            app:destination="@id/dashboard"
+            app:popUpTo="@id/workshops"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/login"
+        android:name="com.internshalaworkshop.Login"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_login_to_dashboard2"
+            app:destination="@id/dashboard"
+            app:popUpTo="@id/workshops" />
+        <action
+            android:id="@+id/action_login_to_register"
+            app:destination="@id/register" />
+    </fragment>
+    <fragment
+        android:id="@+id/workshops"
+        android:name="com.internshalaworkshop.workshops"
+        android:label="fragment_workshops"
+        tools:layout="@layout/fragment_workshops" >
+        <action
+            android:id="@+id/action_workshops_to_login"
+            app:destination="@id/login" />
+        <action
+            android:id="@+id/action_workshops_to_dashboard"
+            app:destination="@id/dashboard"
+            />
+    </fragment>
+    <fragment
+        android:id="@+id/dashboard"
+        android:name="com.internshalaworkshop.dashboard"
+        android:label="fragment_dashboard"
+        tools:layout="@layout/fragment_dashboard" >
+        <action
+            android:id="@+id/action_dashboard_to_workshops2"
+            app:destination="@id/workshops"
+            app:popUpTo="@id/dashboard"
+            app:popUpToInclusive="true" />
+    </fragment>
+</navigation>
