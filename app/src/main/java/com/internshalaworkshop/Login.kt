@@ -58,7 +58,7 @@ class Login : Fragment() {
                     preferenceManager.setEmail(email)
                     preferenceManager.setPassword(password)
                     preferenceManager.setLoggedIn(true)
-                    withContext(Dispatchers.Main){
+                    requireActivity().runOnUiThread {
                         findNavController().navigate(R.id.action_login_to_dashboard2)
                         Toast.makeText(requireContext(), "Login Successfully", Toast.LENGTH_SHORT).show()
                     }
