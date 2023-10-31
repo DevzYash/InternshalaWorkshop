@@ -1,14 +1,17 @@
 package com.internshalaworkshop
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.internshalaworkshop.Adapters.WorkshopAdapter
 import com.internshalaworkshop.Utils.PreferenceManager
 import com.internshalaworkshop.database.AppliedWorkshopDao
@@ -47,6 +50,9 @@ class workshops : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+
         workshopAdapter = WorkshopAdapter { selectedWorkshop ->
             val bottomSheetBinding = BottomSheetWorkshopBinding.inflate(layoutInflater)
             val dialog = BottomSheetDialog(requireContext())
@@ -60,7 +66,7 @@ class workshops : Fragment() {
                     val applied =
                         appliedWorkshopDao.getAppliedWorkshopsByUserEmail(preferenceManager.getEmail()!!)
                     applied.forEach {
-                        if (it.id == selectedWorkshop.id) {
+                        if (it.workshopName == selectedWorkshop.workshopName) {
                             withContext(Dispatchers.Main) {
                                 bottomSheetBinding.applyButton.text = "Already Applied"
                                 bottomSheetBinding.applyButton.isClickable = false
@@ -83,6 +89,8 @@ class workshops : Fragment() {
                         appliedWorkshopDao.insertAppliedWorkshop(
                             AppliedWorkshopEntity(
                                 workshopName = selectedWorkshop.workshopName,
+                                description = selectedWorkshop.description,
+                                date = selectedWorkshop.date,
                                 userEmail = preferenceManager.getEmail()!!
                             )
                         )

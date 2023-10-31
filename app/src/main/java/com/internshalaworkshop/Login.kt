@@ -58,7 +58,10 @@ class Login : Fragment() {
                     preferenceManager.setEmail(email)
                     preferenceManager.setPassword(password)
                     preferenceManager.setLoggedIn(true)
-                    findNavController().navigate(R.id.action_login_to_dashboard2)
+                    withContext(Dispatchers.Main){
+                        findNavController().navigate(R.id.action_login_to_dashboard2)
+                        Toast.makeText(requireContext(), "Login Successfully", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     withContext(Dispatchers.Main) {
                         Toast.makeText(requireContext(), "Invalid Details", Toast.LENGTH_SHORT)

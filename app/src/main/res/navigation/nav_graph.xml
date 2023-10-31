@@ -23,8 +23,7 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_login_to_dashboard2"
-            app:destination="@id/dashboard"
-            app:popUpTo="@id/workshops" />
+            app:destination="@id/dashboard" />
         <action
             android:id="@+id/action_login_to_register"
             app:destination="@id/register" />
@@ -51,6 +50,6 @@
             android:id="@+id/action_dashboard_to_workshops2"
             app:destination="@id/workshops"
             app:popUpTo="@id/dashboard"
-            app:popUpToInclusive="true" />
+            app:popUpToInclusive="false" />
     </fragment>
 </navigation>

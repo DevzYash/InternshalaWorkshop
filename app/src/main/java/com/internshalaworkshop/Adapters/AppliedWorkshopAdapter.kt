@@ -27,8 +27,8 @@ class AppliedWorkshopAdapter(private val onclickItem: (AppliedWorkshopEntity) ->
         RecyclerView.ViewHolder(binding.root) {
         fun bind(appliedWorkshopEntity: AppliedWorkshopEntity) {
             binding.workshopName.text = appliedWorkshopEntity.workshopName
-//            binding.workshopDescription.text = appliedWorkshopEntity.workshopDetails.description
-//            binding.workshopDate.text = appliedWorkshopEntity.workshopDetails.date
+            binding.workshopDescription.text = appliedWorkshopEntity.description
+            binding.workshopDate.text = appliedWorkshopEntity.date
             binding.root.setOnClickListener {
                 onclickItem(appliedWorkshopEntity)
             }

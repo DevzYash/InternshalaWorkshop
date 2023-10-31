@@ -1,13 +1,16 @@
 package com.internshalaworkshop
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.internshalaworkshop.Adapters.AppliedWorkshopAdapter
 import com.internshalaworkshop.Utils.PreferenceManager
 import com.internshalaworkshop.database.MyDatabase
@@ -39,12 +42,46 @@ class dashboard : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    MaterialAlertDialogBuilder(requireActivity())
+                        .setTitle("Exit")
+                        .setMessage("Do you really want to exit ?")
+                        .setCancelable(true)
+                        .setNegativeButton(
+                            "Yes"
+                        ) { _: DialogInterface?, _: Int -> requireActivity().finishAndRemoveTask() }
+                        .setPositiveButton(
+                            "No"
+                        ) { _: DialogInterface?, _: Int -> }.show()
+                }
+            })
+
+
+
         if (!preferenceManager.isLoggedIn()) {
             findNavController().navigate(R.id.action_dashboard_to_workshops2)
         }
 
         binding.workshopFab.setOnClickListener {
             findNavController().navigate(R.id.action_dashboard_to_workshops2)
+        }
+
+        binding.profile.setOnClickListener {
+            MaterialAlertDialogBuilder(requireActivity())
+                .setTitle("Logout")
+                .setMessage("Do you really want to logout ?")
+                .setCancelable(true)
+                .setNegativeButton(
+                    "Yes"
+                ) { _: DialogInterface?, _: Int ->
+                    deleteWorkshops()
+                }
+                .setPositiveButton(
+                    "No"
+                ) { _: DialogInterface?, _: Int -> }.show()
         }
 
         if (preferenceManager.getEmail() != null) {
@@ -57,6 +94,8 @@ class dashboard : Fragment() {
             dialog.setContentView(bottomSheetBinding.root)
             bottomSheetBinding.workshopNameTextView.text =
                 selectedWorkshop.workshopName
+            bottomSheetBinding.descriptionTextView.text = selectedWorkshop.description
+            bottomSheetBinding.dateTextView.text = selectedWorkshop.date
             bottomSheetBinding.applyButton.visibility = View.INVISIBLE
             dialog.show()
 
@@ -76,6 +115,20 @@ class dashboard : Fragment() {
                     .getAppliedWorkshopsByUserEmail(preferenceManager.getEmail()!!)
             withContext(Dispatchers.Main) {
                 workshopAdapter.submitList(appliedWorkshops)
+            }
+        }
+    }
+
+    private fun deleteWorkshops(){
+        CoroutineScope(Dispatchers.IO).launch {
+            val appliedWorkshops = database.appliedWorkshopDao().getAppliedWorkshopsByUserEmail(preferenceManager.getEmail()!!)
+            appliedWorkshops.forEach {
+                database.appliedWorkshopDao().deteleAppliedWorkshop(it)
+            }
+            withContext(Dispatchers.Main){
+                preferenceManager.setLoggedIn(false)
+                requireActivity().finish()
+                requireActivity().startActivity(requireActivity().intent)
             }
         }
     }

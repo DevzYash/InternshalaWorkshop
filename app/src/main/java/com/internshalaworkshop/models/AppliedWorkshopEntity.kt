@@ -18,5 +18,7 @@ data class AppliedWorkshopEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val workshopName:String,
+    val description: String,
+    val date: String,
     val userEmail: String
 )
